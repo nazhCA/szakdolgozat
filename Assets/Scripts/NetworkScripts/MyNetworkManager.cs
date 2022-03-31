@@ -11,7 +11,6 @@ namespace NetworkScripts
         {
             base.OnServerConnect(conn);
             
-            Debug.Log($"OnServerConnect  {conn.identity}");
         }
         
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
@@ -23,7 +22,6 @@ namespace NetworkScripts
             playerSettings.SetDisplayName($"Player {numPlayers.ToString()}");
 
             
-            Debug.Log($"OnServerAddPlayer  {conn.identity}");
         }
 
         public override void OnClientConnect()
@@ -31,7 +29,6 @@ namespace NetworkScripts
             base.OnClientConnect();
 
             
-            Debug.Log("OnClientConnect");
         }
 
         

@@ -24,9 +24,9 @@ namespace Player
 
         void Update()
         {
-            if (isLocalPlayer)
-            {
-                _groundedPlayer = _controller.isGrounded;
+            if (!isLocalPlayer) { return; }
+
+            _groundedPlayer = _controller.isGrounded;
 
                 if (_groundedPlayer && _playerVelocity.y < 0f)
                 {
@@ -47,7 +47,6 @@ namespace Player
                 _controller.Move(_playerVelocity * Time.deltaTime);
 
                 _mainCamera.transform.position = transform.position + new Vector3(0, 1, -10);
-            }
         }
         
         public override void OnStartClient()
@@ -57,6 +56,7 @@ namespace Player
             _controller = gameObject.AddComponent<CharacterController>();
             _controller.height = 1f;
             _controller.minMoveDistance = 0f;
+            _controller.skinWidth = 0.0001f;
         }
         
         public override void OnStartLocalPlayer()

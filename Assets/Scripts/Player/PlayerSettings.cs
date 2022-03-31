@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -43,8 +44,16 @@ namespace Player
             CmdDamagePlayer(10f);
             
         }
-        
-        
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.CompareTag("Enemy") && isLocalPlayer)
+            {
+                Debug.Log("Enemy hit");
+                DamagePlayer();
+            }
+        }
+
         #endregion
         
         #region Server
