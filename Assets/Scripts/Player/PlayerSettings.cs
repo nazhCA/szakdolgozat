@@ -12,6 +12,8 @@ namespace Player
         [SerializeField] private TMP_Text displayNameText = null;
         [SyncVar(hook = nameof(HandleDisplayNameUpdate))] [SerializeField] public string displayName = "Unknown";
 
+        public GameObject offlinePlayer = null;
+
         
 
         #region Client
@@ -22,8 +24,27 @@ namespace Player
             base.OnStartClient();
 
             healthDisplay.text = health.ToString();
+
+            if (isServer && isLocalPlayer)
+            {
+                SpawnOfflinePlayer();
+            }
+
+            if (!isServer && isLocalPlayer)
+            {
+                DespawnOfflinePlayer();
+            }
+            
         }
-        
+
+        [Client]
+        public override void OnStopClient()
+        {
+            DespawnOfflinePlayer();
+            
+            base.OnStopClient();
+        }
+
         private void HandleHealthDisplayUpdate(float oldText, float newText)
         {
             healthDisplay.text = newText.ToString();
@@ -32,7 +53,6 @@ namespace Player
         private void HandleDisplayNameUpdate(string oldName, string newName)
         {
             displayNameText.text = newName;
-            Debug.Log("HandleDisplayNameUpdate");
         }
         
         // Manually damage player via context menu, client call
@@ -49,7 +69,6 @@ namespace Player
         {
             if (other.gameObject.CompareTag("Enemy") && isLocalPlayer)
             {
-                Debug.Log("Enemy hit");
                 DamagePlayer();
             }
         }
@@ -57,6 +76,19 @@ namespace Player
         #endregion
         
         #region Server
+
+        [Command]
+        private void SpawnOfflinePlayer()
+        {
+            Instantiate(offlinePlayer, transform.position - new Vector3(2f,0f,0f), Quaternion.identity);
+        }
+
+        [Command]
+        private void DespawnOfflinePlayer()
+        {
+            GameObject offline = GameObject.FindWithTag("OfflinePlayer");
+            Destroy(offline);
+        }
         
         [Command]
         private void CmdDamagePlayer(float damage)
@@ -85,7 +117,7 @@ namespace Player
         [Server]
         private void CmdDestroyObject(GameObject gObject)
         {
-            NetworkServer.Destroy(gObject);
+            // NetworkServer.Destroy(gObject);
         }
 
         [Server]
@@ -93,7 +125,12 @@ namespace Player
         {
             displayName = newName;
         }
-        
+
+        private void Start()
+        {
+            
+        }
+
         #endregion
 
     }

@@ -24,7 +24,15 @@ namespace Player
 
         void Update()
         {
-            if (!isLocalPlayer) { return; }
+            // if (!isLocalPlayer) { return; }
+
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 10000))
+            {
+                Debug.DrawLine(transform.position, hit.point);
+            }
 
             _groundedPlayer = _controller.isGrounded;
 
@@ -53,7 +61,7 @@ namespace Player
         {
             base.OnStartClient();
 
-            _controller = gameObject.AddComponent<CharacterController>();
+            _controller = gameObject.GetComponent<CharacterController>();
             _controller.height = 1f;
             _controller.minMoveDistance = 0f;
             _controller.skinWidth = 0.0001f;

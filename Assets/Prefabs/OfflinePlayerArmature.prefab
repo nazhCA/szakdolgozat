@@ -1278,9 +1278,10 @@ GameObject:
   - component: {fileID: 6103956467960712492}
   - component: {fileID: -5673653956099465899}
   - component: {fileID: -4479247064206464856}
+  - component: {fileID: 4437796838971345591}
   m_Layer: 8
-  m_Name: PlayerArmature
-  m_TagString: Player
+  m_Name: OfflinePlayerArmature
+  m_TagString: OfflinePlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1522,7 +1523,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 64dce48905ffd9b4293e595fa6941544
+  m_AssetId: 572cb4d5ee51b0e42990de89621438b7
   hasSpawned: 0
 --- !u!114 &5496273549953002539
 MonoBehaviour:
@@ -1592,7 +1593,7 @@ MonoBehaviour:
   healthDisplay: {fileID: 6548634228660150128}
   displayNameText: {fileID: 7897138103977236428}
   displayName: Unknown
-  offlinePlayer: {fileID: 4416926081852918481, guid: 572cb4d5ee51b0e42990de89621438b7, type: 3}
+  offlinePlayer: {fileID: 4416926081852918481, guid: a63bb7be43472d74d807a65a29927e7f, type: 3}
 --- !u!114 &-4479247064206464856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1607,6 +1608,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &4437796838971345591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416926081852918481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da43ab40c3c85644eb459fd0eab79fc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minFollowDistance: 2
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0

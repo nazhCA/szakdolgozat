@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using InputSystem;
+using Mirror;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -6,13 +8,13 @@ using UnityEngine.InputSystem;
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
-namespace StarterAssets
+namespace Player
 {
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class ThirdPersonController : MonoBehaviour
+	public class ThirdPersonController : NetworkBehaviour
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -100,7 +102,16 @@ namespace StarterAssets
 			}
 		}
 
-		private void Start()
+		public override void OnStartAuthority()
+		{
+			base.OnStartAuthority();
+
+			PlayerInput playerInput = GetComponent<PlayerInput>();
+			playerInput.enabled = true;
+
+		}
+
+		void Start()
 		{
 			_hasAnimator = TryGetComponent(out _animator);
 			_controller = GetComponent<CharacterController>();
@@ -113,8 +124,9 @@ namespace StarterAssets
 			_fallTimeoutDelta = FallTimeout;
 		}
 
-		private void Update()
+		void Update()
 		{
+			if (!isLocalPlayer && !GameObject.FindGameObjectWithTag("OfflinePlayer")) { return; }
 			_hasAnimator = TryGetComponent(out _animator);
 			
 			JumpAndGravity();
@@ -172,16 +184,17 @@ namespace StarterAssets
 			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
 			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is no input, set the target speed to 0
 			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+			
 
 			// a reference to the players current horizontal velocity
 			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
 			float speedOffset = 0.1f;
 			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+			
 
 			// accelerate or decelerate to target speed
 			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
