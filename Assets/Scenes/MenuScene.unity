@@ -1740,7 +1740,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   runInBackground: 1
   autoStartServerBuild: 1
-  serverTickRate: 30
+  serverTickRate: 60
   offlineScene: Assets/Scenes/MenuScene.unity
   onlineScene: Assets/Scenes/GameScene.unity
   transport: {fileID: 442886402333211466}
@@ -1750,7 +1750,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 2905236642079117592, guid: f6d78f3075d7ef842b642c23f825e8be, type: 3}
   nameTextField: {fileID: 1698661581}
 --- !u!224 &742519502780834851
 RectTransform:

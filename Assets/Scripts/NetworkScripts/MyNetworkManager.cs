@@ -12,10 +12,10 @@ namespace NetworkScripts
         
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
-            base.OnServerAddPlayer(conn);
             
-            // PlayerSettings playerSettings = conn.identity.GetComponent<PlayerSettings>();
-            // playerSettings.SetDisplayName(nameTextField.text);
+            base.OnServerAddPlayer(conn);
+            PlayerSettings playerSettings = conn.identity.GetComponent<PlayerSettings>();
+            playerSettings.SetDisplayName($"Player {numPlayers.ToString()}");
         }
 
         public override void OnClientConnect()
@@ -23,7 +23,6 @@ namespace NetworkScripts
             base.OnClientConnect();
             
         }
-
         
     }
 }

@@ -7,17 +7,28 @@ namespace Player
 {
     public class PlayerSettings : NetworkBehaviour
     {
-        [SyncVar(hook = nameof(HandleHealthDisplayUpdate))] [SerializeField] public float health = 100f;
+        [SyncVar(hook = nameof(HandleHealthDisplayUpdate))] [SerializeField] public float health = 20f;
         [SerializeField] private TMP_Text healthDisplay = null;
         [SerializeField] private TMP_Text displayNameText = null;
         [SyncVar(hook = nameof(HandleDisplayNameUpdate))] [SerializeField] public string displayName = "Unknown";
 
         public GameObject offlinePlayer = null;
-
+        private GameObject _child;
         
 
         #region Client
-        
+
+        private void Update()
+        {
+            _child.transform.rotation = Quaternion.Euler (0.0f, 0.0f, gameObject.transform.rotation.z * -1.0f);
+        }
+
+        private void Start()
+        {
+            _child = transform.GetChild(0).gameObject;
+
+        }
+
         [Client]
         public override void OnStartClient()
         {
@@ -35,6 +46,12 @@ namespace Player
                 DespawnOfflinePlayer();
             }
             
+        }
+
+        [ContextMenu("ChangeName")]
+        private void ChangeName()
+        {
+            displayName = "kaka";
         }
 
         [Client]
@@ -117,18 +134,13 @@ namespace Player
         [Server]
         private void CmdDestroyObject(GameObject gObject)
         {
-            // NetworkServer.Destroy(gObject);
+            NetworkServer.Destroy(gObject);
         }
 
-        [Server]
+        [Client]
         public void SetDisplayName(string newName)
         {
             displayName = newName;
-        }
-
-        private void Start()
-        {
-            
         }
 
         #endregion
