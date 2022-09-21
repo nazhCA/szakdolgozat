@@ -181,6 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  networkManager: {fileID: 442886402538680634, guid: 1437c0ce282e6a44e82d43b4f2a09205, type: 3}
 --- !u!114 &-4365433560096824737
 MonoBehaviour:
   m_ObjectHideFlags: 0

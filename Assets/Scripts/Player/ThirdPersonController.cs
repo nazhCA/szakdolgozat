@@ -2,6 +2,7 @@
 using InputSystem;
 using Mirror;
 using Mono.CecilX;
+using OfflinePlayer;
 using UnityEngine;
 using UnityEngine.UI;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -148,14 +149,15 @@ namespace Player
 
         void Update()
         {
-            if (!isLocalPlayer && !GameObject.FindGameObjectWithTag("OfflinePlayer")) { return; }
-
-            _hasAnimator = TryGetComponent(out _animator);
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
-            Combat();
-            DrawLine();
+            if (!isLocalPlayer && !GameObject.FindGameObjectWithTag("Player")) { return; }
+            
+	        _hasAnimator = TryGetComponent(out _animator);
+	        JumpAndGravity();
+	        GroundedCheck();
+	        Move();
+	        Combat();
+	        DrawLine();
+	        ChangeBehaviour();
         }
 
         private void LateUpdate()
@@ -207,6 +209,8 @@ namespace Player
 
         private void Move()
         {
+	        _hasAnimator = TryGetComponent(out _animator);
+
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
@@ -249,6 +253,8 @@ namespace Player
             // if there is a move input rotate player when the player is moving
             if (_input.move != Vector2.zero)
             {
+	            
+
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
@@ -292,8 +298,30 @@ namespace Player
 					_lastFired = Time.timeSinceLevelLoad;
                 }
             }
+        }
 
-            
+        private void ChangeBehaviour()
+        {
+	        if (_input.stay)
+	        {
+		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+		        offlineAi.SetBehaviourStay();
+		        _input.stay = false;
+	        }
+	        
+	        if (_input.passive)
+	        {
+		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+		        offlineAi.SetBehaviourPassive();
+		        _input.passive = false;
+	        }
+	        
+	        if (_input.aggressive)
+	        {
+		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+		        offlineAi.SetBehaviourAggressive();
+		        _input.aggressive = false;
+	        }
         }
 
         [Command]

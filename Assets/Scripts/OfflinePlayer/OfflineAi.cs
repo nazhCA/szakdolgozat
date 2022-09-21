@@ -1,31 +1,76 @@
+using System.Collections.Generic;
 using InputSystem;
+using Mirror;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace OfflinePlayer
 {
     public class OfflineAi : MonoBehaviour
     {
+        
+        public enum OfflinePlayerBehaviour
+        {
+            Passive = 1,
+            Stay = 0,
+            Active = 2,
+            Aggressive = 3
+        }
+        public float minFollowDistance = 2f;
+        
+        [SerializeField]
+        public static OfflinePlayerBehaviour offlinePlayerBehaviour;
+        
         private GameObject _player;
         private GameObject[] _helpingPoints;
         private GameObject _helpingPoint;
-        public float minFollowDistance = 2f;
         private bool _shouldFollow = true;
         private StarterAssetsInputs _starterAssetsInputs = null;
+        private StarterAssetsInputs _playerSai = null;
         private float _triggerDistance;
+        public bool combatState;
+        private float _lastFired = Mathf.NegativeInfinity;
+        public GameObject bulletPrefab;
+        public Transform bulletSpawn = null;
+        private Vector3 _vectorOffset = new Vector3(0f, 1.2f, 0f);
+        private GameObject _target;
+        
 
         void Start()
         {
+            Debug.Log(offlinePlayerBehaviour);
             _player = GameObject.FindWithTag("Player");
             _helpingPoints = GameObject.FindGameObjectsWithTag("HelpingPoint");
             _starterAssetsInputs = gameObject.GetComponent<StarterAssetsInputs>();
+            _playerSai = _player.GetComponent<StarterAssetsInputs>();
         }
 
         void Update()
         {
-            FindClosestHelpingPoint();
-            FollowPlayer();
-            GoToHelpingPoint();
-            JumpIfNecessary();
+            switch (offlinePlayerBehaviour)
+            {
+                case OfflinePlayerBehaviour.Passive:
+                    FollowPlayer();
+                    JumpIfNecessary();
+                    break;
+                case OfflinePlayerBehaviour.Active:
+                    FollowPlayer();
+                    FindClosestHelpingPoint();
+                    GoToHelpingPoint();
+                    JumpIfNecessary();
+                    break;
+                case OfflinePlayerBehaviour.Aggressive:
+                    FollowPlayer();
+                    WatchingBackwards();
+                    FindClosestHelpingPoint();
+                    GoToHelpingPoint();
+                    JumpIfNecessary();
+                    break;
+                default:
+                    _starterAssetsInputs.move = Vector2.zero;
+                    break;
+            }
+
         }
 
         private void FindClosestHelpingPoint()
@@ -65,10 +110,21 @@ namespace OfflinePlayer
                     _starterAssetsInputs.move = Vector2.left;
                 }
             }
+
+            if (distance < 1f)
+            {
+                WalkWithPlayer();
+            }
         }
 
         private void GoToHelpingPoint()
         {
+            Debug.Log("first line");
+            if (combatState)
+            {
+                return;
+            }
+            Debug.Log("second line");
             _triggerDistance = _helpingPoint.GetComponent<HelpingPoint.HelpingPoint>().triggerDistance;
             if (Vector3.Distance(_player.transform.position, _helpingPoint.transform.position) < _triggerDistance)
             {
@@ -96,7 +152,7 @@ namespace OfflinePlayer
 
         private void JumpIfNecessary()
         {
-            Vector3 offset = new Vector3(0f, 1f, 0f);
+            Vector3 offset = new Vector3(0f, 0.8f, 0f);
             RaycastHit hit;
             if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 3f))
             {
@@ -116,6 +172,82 @@ namespace OfflinePlayer
         private void Jump()
         {
             _starterAssetsInputs.jump = true;
+        }
+
+        private void WalkWithPlayer()
+        {
+            if (transform.position.x - _player.transform.position.x > 0)
+            {
+                _starterAssetsInputs.move = Vector2.right;
+            }
+            else
+            {
+                _starterAssetsInputs.move = Vector2.left;
+            }
+        }
+
+        void WatchingBackwards()
+        {
+            
+            RaycastHit hit;
+           if (!combatState && Physics.Raycast(transform.position + _vectorOffset, -transform.forward, out hit, 8f))
+           {
+               if (hit.collider.CompareTag("Enemy"))
+               {
+                   _shouldFollow = false;
+                   _target = hit.collider.gameObject;
+                   transform.rotation = Quaternion.Inverse(transform.rotation);
+                   combatState = true;
+               }
+               
+            }
+
+            Combat();
+        }
+
+        void Combat()
+        {
+            if (combatState)
+            {
+                if (Time.timeSinceLevelLoad - _lastFired > 0.3f && combatState)
+                {
+                    _starterAssetsInputs.move = Vector2.zero;
+                    Fire();
+                    _lastFired = Time.timeSinceLevelLoad;
+                }
+
+                if (!_target)
+                {
+                    _shouldFollow = true;
+                    combatState = false;
+                }
+            }
+        }
+        
+        void Fire()
+        {
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+            bullet.GetComponent<Rigidbody>().velocity = transform.forward * 8f;
+            NetworkServer.Spawn(bullet);
+            Destroy(bullet, 2);
+        }
+
+        public void SetBehaviourPassive()
+        {
+            offlinePlayerBehaviour = OfflinePlayerBehaviour.Passive;
+            Debug.Log("clicked " + offlinePlayerBehaviour);
+        }
+        
+        public void SetBehaviourStay()
+        {
+            offlinePlayerBehaviour = OfflinePlayerBehaviour.Stay;
+            Debug.Log("clicked " + offlinePlayerBehaviour);
+        }
+        
+        public void SetBehaviourAggressive()
+        {
+            offlinePlayerBehaviour = OfflinePlayerBehaviour.Aggressive;
+            Debug.Log("clicked " + offlinePlayerBehaviour);
         }
     }
 }

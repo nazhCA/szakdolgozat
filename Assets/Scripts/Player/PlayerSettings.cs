@@ -51,7 +51,7 @@ namespace Player
         [ContextMenu("ChangeName")]
         private void ChangeName()
         {
-            displayName = "kaka";
+            displayName = "teszt név";
         }
 
         [Client]
@@ -74,11 +74,21 @@ namespace Player
         
         // Manually damage player via context menu, client call
         [ContextMenu("DamagePlayer")]
-        private void DamagePlayer()
+        public void DamagePlayer(int damage)
         {
 
             // Call a server function on client
-            CmdDamagePlayer(10f);
+            CmdDamagePlayer(damage);
+            
+        }
+        
+        public void DamageOfflinePlayer(int damage)
+        {
+
+            health -= damage;
+            
+            // Call a server function from server
+            CheckIfPlayerIsDead();
             
         }
 
@@ -86,7 +96,7 @@ namespace Player
         {
             if (other.gameObject.CompareTag("Enemy") && isLocalPlayer)
             {
-                DamagePlayer();
+                DamagePlayer(10);
             }
         }
 

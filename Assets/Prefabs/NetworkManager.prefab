@@ -681,7 +681,11 @@ MonoBehaviour:
   playerPrefab: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 4416926081852918481, guid: a29ce33406838464abee4de87c335860, type: 3}
+  friendlyFire: 1
+  enemyDamage: 10
+  playerDamage: 15
   nameTextField: {fileID: 0}
 --- !u!114 &8368322876070157947
 MonoBehaviour:

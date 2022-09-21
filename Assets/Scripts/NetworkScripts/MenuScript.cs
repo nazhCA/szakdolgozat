@@ -11,6 +11,7 @@ namespace NetworkScripts
         public NetworkManager networkManager;
         public GameObject menuPanel;
         public GameObject gamePanel;
+        public GameObject aiPanel;
         private bool paused = false;
         public GameObject player;
 
@@ -19,6 +20,7 @@ namespace NetworkScripts
             networkManager.StartHost();
             menuPanel.SetActive(false);
             gamePanel.SetActive(true);
+            aiPanel.SetActive(true);
             paused = false;
         }
 
@@ -53,6 +55,7 @@ namespace NetworkScripts
         {
             menuPanel.SetActive(true);
             gamePanel.SetActive(false);
+            aiPanel.SetActive(false);
             paused = false;
         }
 

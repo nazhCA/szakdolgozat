@@ -14,6 +14,9 @@ namespace InputSystem
 		public bool jump;
 		public bool sprint;
 		public bool fire;
+		public bool stay;
+		public bool passive;
+		public bool aggressive;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -52,6 +55,21 @@ namespace InputSystem
 		{
 			FireInput(value.isPressed);
 		}
+		
+		public void OnStay(InputValue value)
+		{
+			StayInput(value.isPressed);
+		}
+		
+		public void OnPassive(InputValue value)
+		{
+			PassiveInput(value.isPressed);
+		}
+		
+		public void OnAggressive(InputValue value)
+		{
+			AggressiveInput(value.isPressed);
+		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -80,6 +98,21 @@ namespace InputSystem
 		public void FireInput(bool newFireState)
 		{
 			fire = newFireState;
+		}
+		
+		public void StayInput(bool newState)
+		{
+			stay = newState;
+		}
+		
+		public void PassiveInput(bool newState)
+		{
+			passive = newState;
+		}
+		
+		public void AggressiveInput(bool newState)
+		{
+			aggressive = newState;
 		}
 
 #if !UNITY_IOS || !UNITY_ANDROID
