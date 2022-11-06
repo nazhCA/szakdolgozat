@@ -16,7 +16,9 @@ namespace InputSystem
 		public bool fire;
 		public bool stay;
 		public bool passive;
+		public bool active;
 		public bool aggressive;
+		public bool moveAi;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -66,10 +68,21 @@ namespace InputSystem
 			PassiveInput(value.isPressed);
 		}
 		
+		public void OnActive(InputValue value)
+		{
+			ActiveInput(value.isPressed);
+		}
+		
 		public void OnAggressive(InputValue value)
 		{
 			AggressiveInput(value.isPressed);
 		}
+
+		public void OnMoveAi(InputValue value)
+		{
+			MoveAiInput(value.isPressed);
+		}
+		
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -110,9 +123,19 @@ namespace InputSystem
 			passive = newState;
 		}
 		
+		public void ActiveInput(bool newState)
+		{
+			active = newState;
+		}
+		
 		public void AggressiveInput(bool newState)
 		{
 			aggressive = newState;
+		}
+		
+		public void MoveAiInput(bool valueIsPressed)
+		{
+			moveAi = valueIsPressed;
 		}
 
 #if !UNITY_IOS || !UNITY_ANDROID

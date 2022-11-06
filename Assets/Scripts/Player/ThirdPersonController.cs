@@ -287,7 +287,6 @@ namespace Player
                 {
 	                if (!isLocalPlayer)
                     {
-						Debug.Log("Combat returned");
                         return;
                     }
 	                _mousePos = Input.mousePosition;
@@ -302,26 +301,52 @@ namespace Player
 
         private void ChangeBehaviour()
         {
+	        
 	        if (_input.stay)
 	        {
-		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+		        var offlineAi = CheckIfOfflinePlayerExist();
+		        if (offlineAi == null) {Debug.Log("There is no offline player"); return;}
 		        offlineAi.SetBehaviourStay();
 		        _input.stay = false;
 	        }
 	        
-	        if (_input.passive)
+	        if (_input.passive )
 	        {
-		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+		        var offlineAi = CheckIfOfflinePlayerExist();
+		        if (offlineAi == null) {Debug.Log("There is no offline player"); return;}
 		        offlineAi.SetBehaviourPassive();
 		        _input.passive = false;
 	        }
 	        
+	        if (_input.active)
+	        {
+		        var offlineAi = CheckIfOfflinePlayerExist();
+		        if (offlineAi == null) {Debug.Log("There is no offline player"); return;}
+		        offlineAi.SetBehaviourActive();
+		        _input.active = false;
+	        }
+	        
 	        if (_input.aggressive)
 	        {
-		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+		        var offlineAi = CheckIfOfflinePlayerExist();
+		        if (offlineAi == null) {Debug.Log("There is no offline player"); return;}
 		        offlineAi.SetBehaviourAggressive();
 		        _input.aggressive = false;
 	        }
+        }
+
+        private OfflineAi CheckIfOfflinePlayerExist()
+        {
+	        try
+	        {
+		        OfflineAi offlineAi = GameObject.FindWithTag("OfflinePlayer").GetComponent<OfflineAi>();
+				return offlineAi;
+	        }
+	        catch (Exception e)
+	        {
+		        return null;
+	        }
+
         }
 
         [Command]

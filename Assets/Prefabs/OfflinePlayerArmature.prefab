@@ -1279,6 +1279,7 @@ GameObject:
   - component: {fileID: -5673653956099465899}
   - component: {fileID: -4479247064206464856}
   - component: {fileID: 4437796838971345591}
+  - component: {fileID: 5053329772255847743}
   m_Layer: 8
   m_Name: OfflinePlayerArmature
   m_TagString: OfflinePlayer
@@ -1358,7 +1359,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   MoveSpeed: 2
-  SprintSpeed: 5.335
+  SprintSpeed: 7
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
   JumpHeight: 2
@@ -1376,7 +1377,7 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 1
-  fireRate: 0.5
+  fireRate: 0.3
   bulletVelocity: 6
   bulletPrefab: {fileID: 2905236642079117592, guid: f6d78f3075d7ef842b642c23f825e8be, type: 3}
   bulletSpawn: {fileID: 9028798449729156616}
@@ -1418,6 +1419,10 @@ MonoBehaviour:
   jump: 0
   sprint: 0
   fire: 0
+  stay: 0
+  passive: 0
+  aggressive: 0
+  moveAi: 0
   analogMovement: 0
   cursorLocked: 0
   cursorInputForLook: 1
@@ -1628,9 +1633,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minFollowDistance: 2.36
+  shouldFollow: 1
   combatState: 0
   bulletPrefab: {fileID: 2905236642079117592, guid: f6d78f3075d7ef842b642c23f825e8be, type: 3}
   bulletSpawn: {fileID: 9028798449729156616}
+--- !u!114 &5053329772255847743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416926081852918481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71ef4c97a6f41cabde966fb0ffc6710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0

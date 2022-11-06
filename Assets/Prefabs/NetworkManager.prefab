@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 442886402538680635}
   m_Layer: 0
   m_Name: NetworkManager
-  m_TagString: Untagged
+  m_TagString: NetworkManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -702,6 +702,7 @@ MonoBehaviour:
   networkManager: {fileID: 442886402538680633}
   menuPanel: {fileID: 0}
   gamePanel: {fileID: 0}
+  aiPanel: {fileID: 0}
   player: {fileID: 0}
 --- !u!114 &442886402538680635
 MonoBehaviour:

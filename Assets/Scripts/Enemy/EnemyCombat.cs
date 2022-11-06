@@ -14,9 +14,10 @@ namespace Enemy
         public float patrolChangeDirection = 2f;
         public GameObject bulletPrefab;
         public Transform bulletSpawn = null;
-        
+
         private ThirdPersonController _tpc;
         private StarterAssetsInputs _sai;
+        private EnemyHealth _enemyHealth;
         private bool _patrolLeftRight = true;
         private float _offset = 0f;
         private bool _isPatrolling = true;
@@ -26,14 +27,13 @@ namespace Enemy
         private RaycastHit _hit;
         private Vector3 _vectorOffset = new Vector3(0f, 1.2f, 0f);
         public bool justSpawned = false;
-        
 
 
         private void Start()
         {
             _tpc = GetComponent<ThirdPersonController>();
             _sai = GetComponent<StarterAssetsInputs>();
-
+            _enemyHealth = GetComponent<EnemyHealth>();
         }
 
         void Update()
@@ -43,6 +43,7 @@ namespace Enemy
             Patrol();
             SearchForPlayer();
             Combat();
+            FleeIfNeeded();
         }
 
         public void Patrol()
@@ -68,7 +69,6 @@ namespace Enemy
                 {
                     _sai.move = Vector2.left;
                 }
-
             }
             else
             {
@@ -77,7 +77,6 @@ namespace Enemy
                     _sai.move = Vector2.zero;
                 }
             }
-            
         }
 
         void Combat()
@@ -88,12 +87,12 @@ namespace Enemy
                 {
                     enablePatrolling = false;
                     _sai.move = Vector2.zero;
-                    CmdFire();   
+                    CmdFire();
                     _lastFired = Time.timeSinceLevelLoad;
                 }
             }
         }
-        
+
         void CmdFire()
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
@@ -101,7 +100,7 @@ namespace Enemy
             NetworkServer.Spawn(bullet);
             Destroy(bullet, 2);
         }
-        
+
         public void SearchForPlayer()
         {
             RaycastHit hit;
@@ -112,7 +111,7 @@ namespace Enemy
                 _combatState = true;
                 _followPlayer = true;
                 justSpawned = false;
-            } 
+            }
             else if (_followPlayer)
             {
                 if (_hit.transform && Vector3.Distance(transform.position, _hit.transform.position) > 2f)
@@ -142,7 +141,6 @@ namespace Enemy
                 {
                     _sai.move = Vector2.right;
                 }
-                
                 JumpIfNeccessary();
             }
         }
@@ -153,7 +151,7 @@ namespace Enemy
             RaycastHit hit;
             if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 3f))
             {
-                if (hit.collider.CompareTag("Obstacle"))
+                if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("Enemy"))
                 {
                     _sai.jump = true;
                 }
@@ -164,13 +162,26 @@ namespace Enemy
         {
             if (justSpawned)
             {
-                Debug.Log("moving right");
                 _sai.sprint = true;
                 _sai.move = Vector2.right;
             }
-            
         }
-        
+
+        void FleeIfNeeded()
+        {
+            if (_enemyHealth.currentHealth < 40)
+            {
+                _sai.sprint = true;
+                if (transform.position.x - GameObject.FindWithTag("Player").transform.position.x < 0)
+                {
+                    _sai.move = Vector2.left;
+                }
+                else
+                {
+                    _sai.move = Vector2.right;
+                }
+                JumpIfNeccessary();
+            }
+        }
     }
-    
 }

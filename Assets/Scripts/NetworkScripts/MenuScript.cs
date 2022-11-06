@@ -12,6 +12,7 @@ namespace NetworkScripts
         public GameObject menuPanel;
         public GameObject gamePanel;
         public GameObject aiPanel;
+        public GameObject endPanel;
         private bool paused = false;
         public GameObject player;
 
@@ -34,6 +35,7 @@ namespace NetworkScripts
             networkManager.StartClient();
             menuPanel.SetActive(false);
             gamePanel.SetActive(true);
+            aiPanel.SetActive(false);
             paused = false;
         }
 
@@ -48,6 +50,7 @@ namespace NetworkScripts
             {
                 networkManager.StopClient();
             }
+            
             paused = false;
         }
         

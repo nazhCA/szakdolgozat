@@ -1,5 +1,7 @@
 using System;
 using Mirror;
+using NetworkScripts;
+using OfflinePlayer;
 using TMPro;
 using UnityEngine;
 
@@ -110,14 +112,18 @@ namespace Player
             Instantiate(offlinePlayer, transform.position - new Vector3(2f,0f,0f), Quaternion.identity);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void DespawnOfflinePlayer()
         {
-            GameObject offline = GameObject.FindWithTag("OfflinePlayer");
+            // DisableMoveAiToCursor();
+            var menuScript = GameObject.FindGameObjectWithTag("NetworkManager");
+            var aiPanel = menuScript.GetComponent<MenuScript>().aiPanel;
+            aiPanel.SetActive(false);
+            var offline = GameObject.FindWithTag("OfflinePlayer");
             Destroy(offline);
         }
-        
-        [Command]
+
+        [Command(requiresAuthority = false)]
         private void CmdDamagePlayer(float damage)
         {
             health -= damage;
