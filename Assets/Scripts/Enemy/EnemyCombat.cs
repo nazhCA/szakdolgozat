@@ -5,6 +5,7 @@ using Mirror;
 using Player;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Enemy
 {
@@ -27,6 +28,9 @@ namespace Enemy
         private RaycastHit _hit;
         private Vector3 _vectorOffset = new Vector3(0f, 1.2f, 0f);
         public bool justSpawned = false;
+        public bool isAlreadyUsedShieldOrLostTheTry = false;
+        public bool shieldActive = false;
+        private float shieldActivateTime = 0.0f;
 
 
         private void Start()
@@ -171,6 +175,24 @@ namespace Enemy
         {
             if (_enemyHealth.currentHealth < 40)
             {
+                if (!isAlreadyUsedShieldOrLostTheTry)
+                {
+                    if (Random.Range(1,10) > 5)
+                    {
+                        ActivateShield();
+                        isAlreadyUsedShieldOrLostTheTry = true;
+                        return;
+                    }
+                    
+                    isAlreadyUsedShieldOrLostTheTry = true;
+                }
+
+                if (shieldActive)
+                {
+                    DeactivateShield();
+                    return;
+                }
+                
                 _sai.sprint = true;
                 if (transform.position.x - GameObject.FindWithTag("Player").transform.position.x < 0)
                 {
@@ -183,5 +205,34 @@ namespace Enemy
                 JumpIfNeccessary();
             }
         }
+
+        private void ActivateShield()
+        {
+            Debug.Log("Shield Active");
+            shieldActivateTime = Time.time;
+            shieldActive = true;
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,255,0);
+        }
+
+        private void DeactivateShield()
+        {
+            if (Time.time - shieldActivateTime > 3f)
+            {
+                Debug.Log("Shield Inactive");
+                shieldActive = false;
+                gameObject.GetComponent<Renderer>().material.color = Color.red;
+            }
+        }
+
+        // [Command]
+        // public bool ShouldActivateShield(int minInclusive, int maxInclusive, int border)
+        // {
+        //     return ShouldActivateShieldOnServer(minInclusive, maxInclusive, border);
+        // }
+        //
+        // private bool ShouldActivateShieldOnServer(int minInclusive, int maxInclusive, int border)
+        // {
+        //     return true;
+        // }
     }
 }

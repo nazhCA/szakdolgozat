@@ -17,6 +17,13 @@ namespace Enemy
                 return;
             }
 
+            EnemyCombat enemyCombat = GetComponent<EnemyCombat>();
+            
+            if (enemyCombat.shieldActive)
+            {
+                return;
+            }
+
             currentHealth -= amount;
             if (currentHealth <= 0)
             {
