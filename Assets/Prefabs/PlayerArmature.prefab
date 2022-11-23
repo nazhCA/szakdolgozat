@@ -1377,7 +1377,7 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 1
-  fireRate: 0.1
+  fireRate: 0.2
   bulletVelocity: 10
   bulletPrefab: {fileID: 2905236642079117592, guid: f6d78f3075d7ef842b642c23f825e8be, type: 3}
   bulletSpawn: {fileID: 8201754888014655513}
@@ -1421,6 +1421,7 @@ MonoBehaviour:
   fire: 0
   stay: 0
   passive: 0
+  active: 0
   aggressive: 0
   moveAi: 0
   analogMovement: 0
@@ -1647,6 +1648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d71ef4c97a6f41cabde966fb0ffc6710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0

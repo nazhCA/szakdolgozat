@@ -74,6 +74,7 @@ namespace Player
         public bool LockCameraPosition = false;
 
         [Header("Combat")] public float fireRate = 0.5f;
+
         public float bulletVelocity = 6.0f;
         public GameObject bulletPrefab;
         public Transform bulletSpawn = null;
@@ -114,6 +115,10 @@ namespace Player
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        
+        float oldValue = 0f;
+        float boostFireRateTime = 0f;
+        private bool fireRateActive = false;
 
         private void Awake()
         {
@@ -158,6 +163,7 @@ namespace Player
 	        Combat();
 	        DrawLine();
 	        ChangeBehaviour();
+	        DeactivateFireRateBoost();
         }
 
         private void LateUpdate()
@@ -458,5 +464,21 @@ namespace Player
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
         }
+
+		public void SetFireRateAndTriggerBoost(float value)
+		{
+			oldValue = fireRate;
+			fireRate = value;
+			boostFireRateTime = Time.time;
+			fireRateActive = true;
+		}
+
+		private void DeactivateFireRateBoost()
+		{
+			if (fireRateActive && Time.time - boostFireRateTime > 3f)
+			{
+				fireRate = oldValue;
+			}
+		}
     }
 }

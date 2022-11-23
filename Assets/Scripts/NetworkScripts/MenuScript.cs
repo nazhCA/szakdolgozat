@@ -24,6 +24,11 @@ namespace NetworkScripts
             aiPanel.SetActive(true);
             paused = false;
         }
+        
+        public void QuitApplication()
+        {
+            Application.Quit();
+        }
 
         public void SetIp(string ip)
         {

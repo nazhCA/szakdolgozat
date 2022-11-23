@@ -25,5 +25,10 @@ namespace NetworkScripts
             playerSettings.SetDisplayName($"Player {numPlayers.ToString()}");
         }
 
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
+        {
+            base.OnServerDisconnect(conn);
+            Debug.Log("Kliens lecsatlakozott");
+        }
     }
 }
