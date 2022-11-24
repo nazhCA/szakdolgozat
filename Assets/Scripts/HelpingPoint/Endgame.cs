@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using NetworkScripts;
 using OfflinePlayer;
 using Player;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace HelpingPoint
 {
@@ -20,6 +16,11 @@ namespace HelpingPoint
 
                 var remainingEnemies = GameObject.FindGameObjectsWithTag("Enemy");
 
+                if (remainingEnemies.Length > 0)
+                {
+                    return;
+                }
+                
                 Debug.Log(remainingEnemies.Length.ToString());
 
                 LoadEndScreen();

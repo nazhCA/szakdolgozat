@@ -1420,6 +1420,7 @@ MonoBehaviour:
   fire: 0
   stay: 0
   passive: 0
+  active: 0
   aggressive: 0
   moveAi: 0
   analogMovement: 0
@@ -1658,6 +1659,9 @@ MonoBehaviour:
   syncInterval: 0.1
   currentHealth: 100
   healthDisplay: {fileID: 6548634228660150128}
+  fireRateBooster: {fileID: 5546030191806593891, guid: dcfed520502be1347a6865391aac3d94, type: 3}
+  jumpBooster: {fileID: 2372094061281270344, guid: db9d304a4546cc04dbfdb67602832e58, type: 3}
+  runBooster: {fileID: 6772353786726164296, guid: b4cdca947fb97344eb248dfaa64c1485, type: 3}
 --- !u!114 &7009196399810209240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1677,6 +1681,8 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2905236642079117592, guid: f6d78f3075d7ef842b642c23f825e8be, type: 3}
   bulletSpawn: {fileID: 2266486641504257537}
   justSpawned: 0
+  isAlreadyUsedShieldOrLostTheTry: 0
+  shieldActive: 0
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0

@@ -97,6 +97,7 @@ namespace Enemy
             }
         }
 
+        [Command(requiresAuthority = false)]
         void CmdFire()
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);

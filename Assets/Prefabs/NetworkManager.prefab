@@ -683,6 +683,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 4416926081852918481, guid: a29ce33406838464abee4de87c335860, type: 3}
+  - {fileID: 5546030191806593891, guid: dcfed520502be1347a6865391aac3d94, type: 3}
   friendlyFire: 1
   enemyDamage: 10
   playerDamage: 15
@@ -703,6 +704,7 @@ MonoBehaviour:
   menuPanel: {fileID: 0}
   gamePanel: {fileID: 0}
   aiPanel: {fileID: 0}
+  endPanel: {fileID: 0}
   player: {fileID: 0}
 --- !u!114 &442886402538680635
 MonoBehaviour:

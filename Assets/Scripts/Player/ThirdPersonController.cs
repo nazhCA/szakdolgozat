@@ -1,7 +1,6 @@
 ﻿using System;
 using InputSystem;
 using Mirror;
-using Mono.CecilX;
 using OfflinePlayer;
 using UnityEngine;
 using UnityEngine.UI;
@@ -116,9 +115,17 @@ namespace Player
 
         private bool _hasAnimator;
         
-        float oldValue = 0f;
+        float oldFireRateValue = 0f;
+        float oldJumpValue = 0f;
+        float oldRunValue = 0f;
+        
         float boostFireRateTime = 0f;
-        private bool fireRateActive = false;
+        float boostRunTime = 0f;
+        float boostJumpTime = 0f;
+        
+        private bool fireRateBoostActive = false;
+        private bool jumpBoostActive = false;
+        private bool runBoostActive = false;
 
         private void Awake()
         {
@@ -163,7 +170,7 @@ namespace Player
 	        Combat();
 	        DrawLine();
 	        ChangeBehaviour();
-	        DeactivateFireRateBoost();
+	        DeactivateBoosters();
         }
 
         private void LateUpdate()
@@ -465,20 +472,73 @@ namespace Player
                 GroundedRadius);
         }
 
-		public void SetFireRateAndTriggerBoost(float value)
+		public void TriggerFireRateBoost(float value)
 		{
-			oldValue = fireRate;
+			oldFireRateValue = fireRate;
 			fireRate = value;
 			boostFireRateTime = Time.time;
-			fireRateActive = true;
+			fireRateBoostActive = true;
+			EnableOrDisableInfoText("FireRateText", true);
 		}
 
 		private void DeactivateFireRateBoost()
 		{
-			if (fireRateActive && Time.time - boostFireRateTime > 3f)
+			if (fireRateBoostActive && Time.time - boostFireRateTime > 3f)
 			{
-				fireRate = oldValue;
+				fireRate = oldFireRateValue;
+				fireRateBoostActive = false;
+				EnableOrDisableInfoText("FireRateText", false);
 			}
+		}
+
+		public void TriggerRunBoost(float value)
+		{
+			oldRunValue = SprintSpeed;
+			SprintSpeed = value;
+			boostRunTime = Time.time;
+			runBoostActive = true;
+			EnableOrDisableInfoText("RunText", true);
+		}
+
+		private void DeactivateRunBoost()
+		{
+			if (runBoostActive && Time.time - boostRunTime > 3f)
+			{
+				SprintSpeed = oldRunValue;
+				runBoostActive = false;
+				EnableOrDisableInfoText("RunText", false);
+			}
+		}
+		
+		public void TriggerJumpBoost(float value)
+		{
+			oldJumpValue = JumpHeight;
+			JumpHeight = value;
+			boostJumpTime = Time.time;
+			jumpBoostActive = true;
+			EnableOrDisableInfoText("JumpText", true);
+		}
+
+		private void DeactivateJumpBoost()
+		{
+			if (jumpBoostActive && Time.time - boostJumpTime > 3f)
+			{
+				JumpHeight = oldJumpValue;
+				jumpBoostActive = false;
+				EnableOrDisableInfoText("JumpText", false);
+			}
+		}
+
+		private void DeactivateBoosters()
+		{
+			DeactivateFireRateBoost();
+			DeactivateRunBoost();
+			DeactivateJumpBoost();
+		}
+
+		private void EnableOrDisableInfoText(string textObject, bool enable)
+		{
+			GameObject.Find("InfoPanel").transform.Find(textObject).gameObject.SetActive(enable);
 		}
     }
 }

@@ -4,18 +4,17 @@ using UnityEngine;
 
 namespace Items
 {
-    public class FireRateBooster : NetworkBehaviour
+    public class RunBooster : MonoBehaviour
     {
-        public float triggeredFireRate = 0.1f;
+        public float triggeredRunSpped = 10f;
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Acquired Fire Rate Booster");
-                other.gameObject.GetComponent<ThirdPersonController>().TriggerFireRateBoost(triggeredFireRate);
+                Debug.Log("Acquired Run Booster");
+                other.gameObject.GetComponent<ThirdPersonController>().TriggerRunBoost(triggeredRunSpped);
                 NetworkServer.Destroy(gameObject);
             }
         }
     }
-
 }

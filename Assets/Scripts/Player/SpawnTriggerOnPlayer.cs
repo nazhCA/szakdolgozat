@@ -19,8 +19,8 @@ namespace Player
                 SpawnTrigger.SpawnTrigger spawnTrigger = other.gameObject.GetComponent<SpawnTrigger.SpawnTrigger>();
                 if (!spawnTrigger.used)
                 {
-                    other.gameObject.GetComponent<NetworkIdentity>()
-                        .AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+                    // other.gameObject.GetComponent<NetworkIdentity>()
+                    //     .AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
                     CmdSpawnEnemy();
 
                     spawnTrigger.used = true;
