@@ -292,16 +292,10 @@ namespace Player
 			}
 		}
 
-        private void Combat()
-        {
-	        if (_input.fire)
-            {
-                if (Time.timeSinceLevelLoad - _lastFired > fireRate)
-                {
-	                if (!isLocalPlayer)
-                    {
-                        return;
-                    }
+        private void Combat() {
+	        if (!isLocalPlayer) { return; }
+	        if (_input.fire) {
+                if (Time.timeSinceLevelLoad - _lastFired > fireRate) {
 	                _mousePos = Input.mousePosition;
 	                _mousePos.z = 10f; 
 	                _worldPosition = _cam.ScreenToWorldPoint(_mousePos);
@@ -310,6 +304,15 @@ namespace Player
 					_lastFired = Time.timeSinceLevelLoad;
                 }
             }
+        }
+        
+        [Command]
+        void CmdFire(Vector3 worldPosition, Vector3 bulletSpawnPos)
+        {
+	        GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+	        bullet.GetComponent<Rigidbody>().velocity = (worldPosition - bulletSpawnPos).normalized * bulletVelocity;
+	        NetworkServer.Spawn(bullet);
+	        Destroy(bullet, 2);
         }
 
         private void ChangeBehaviour()
@@ -361,17 +364,7 @@ namespace Player
 	        }
 
         }
-
-        [Command]
-        void CmdFire(Vector3 worldPosition, Vector3 bulletSpawnPos)
-        {
-	        GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-	        bullet.GetComponent<Rigidbody>().velocity = (worldPosition - bulletSpawnPos).normalized * bulletVelocity;
-            NetworkServer.Spawn(bullet);
-            // Debug.Log("Firing");
-            Destroy(bullet, 2);
-        }
-
+        
         private void DrawLine()
         {
 	        if (!isLocalPlayer) { return; }

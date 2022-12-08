@@ -168,12 +168,7 @@ namespace OfflinePlayer
             RaycastHit hit;
             if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 3f))
             {
-                if (hit.collider.CompareTag("Obstacle"))
-                {
-                    Jump();
-                }
-
-                if (hit.collider.CompareTag("Player") && !shouldFollow)
+                if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("Player") && !shouldFollow)
                 {
                     Jump();
                 }

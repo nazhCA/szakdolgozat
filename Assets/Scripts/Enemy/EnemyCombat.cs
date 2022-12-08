@@ -172,35 +172,24 @@ namespace Enemy
             }
         }
 
-        void FleeIfNeeded()
-        {
-            if (_enemyHealth.currentHealth < 40)
-            {
-                if (!isAlreadyUsedShieldOrLostTheTry)
-                {
-                    if (Random.Range(1,10) > 5)
-                    {
+        public void FleeIfNeeded() {
+            if (_enemyHealth.currentHealth < 40) {
+                if (!isAlreadyUsedShieldOrLostTheTry) {
+                    if (Random.Range(1,10) > 5) {
                         ActivateShield();
                         isAlreadyUsedShieldOrLostTheTry = true;
                         return;
                     }
-                    
                     isAlreadyUsedShieldOrLostTheTry = true;
                 }
-
-                if (shieldActive)
-                {
+                if (shieldActive) {
                     DeactivateShield();
                     return;
                 }
-                
                 _sai.sprint = true;
-                if (transform.position.x - GameObject.FindWithTag("Player").transform.position.x < 0)
-                {
+                if (transform.position.x - GameObject.FindWithTag("Player").transform.position.x < 0) {
                     _sai.move = Vector2.left;
-                }
-                else
-                {
+                }else { 
                     _sai.move = Vector2.right;
                 }
                 JumpIfNeccessary();

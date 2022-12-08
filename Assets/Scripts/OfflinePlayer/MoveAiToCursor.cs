@@ -72,32 +72,25 @@ namespace OfflinePlayer
             if (_starterAssetsInputs.moveAi)
             {
                 _offlineAi.shouldFollow = false;
-                
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
                 {
-                    // Debug.Log(hit.point.ToString());
                     if (hit.collider.gameObject.CompareTag("MoveAiPlane"))
                     {
-                        Debug.Log("Plane hit");
                         _moveToPosition = hit.point;
                     }
 
                     if (hit.collider.gameObject.CompareTag("Enemy"))
                     {
-                        Debug.Log("Enemy hit");
                         _target = hit.collider.gameObject;
                     }
                 }
-
                 Debug.DrawLine(Camera.main.transform.position, hit.point);
             }
-
             if (_moveToPosition != Vector3.zero)
             {
                 _offlinePlayerSai.sprint = true;
                 _offlineAi.Target = null;
-                // Debug.Log(_moveToPosition.ToString());
                 MakeAiRunToDesignatedPoint(_moveToPosition);
             }
         }
